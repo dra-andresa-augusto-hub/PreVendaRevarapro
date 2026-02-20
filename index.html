@@ -1,1 +1,1507 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASM Gestão Clínica PRO - Multi-Usuário</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --navy: #1a237e;
+            --navy-light: #283593;
+            --gold: #ffd700;
+            --gold-dark: #ffb300;
+            --light-gray: #f5f5f5;
+            --white: #ffffff;
+            --success: #4caf50;
+            --danger: #f44336;
+            --warning: #ff9800;
+            --info: #2196f3;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--navy) 0%, #0d1642 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        /* ===== TELAS DE AUTH ===== */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .auth-box {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border: 3px solid var(--gold);
+        }
+        
+        .auth-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .auth-logo h1 {
+            color: var(--navy);
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .auth-logo p {
+            color: var(--gold-dark);
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--navy);
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--navy);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 10px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+            color: var(--white);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(26, 35, 126, 0.4);
+        }
+        
+        .btn-gold {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+            color: var(--navy);
+        }
+        
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #333;
+        }
+        
+        .auth-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .auth-links a {
+            color: var(--navy);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .alert-success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #4caf50;
+        }
+        
+        .alert-error {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #f44336;
+        }
+        
+        .alert-info {
+            background: #e3f2fd;
+            color: #1565c0;
+            border: 1px solid #2196f3;
+        }
+        
+        .hidden { display: none !important; }
+        
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .badge-admin {
+            background: var(--gold);
+            color: var(--navy);
+        }
+        
+        .badge-user {
+            background: var(--navy);
+            color: var(--white);
+        }
+        
+        /* ===== SISTEMA PRINCIPAL ===== */
+        .app-container {
+            display: none;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 260px;
+            height: 100vh;
+            background: linear-gradient(180deg, var(--navy) 0%, #0d1642 100%);
+            color: var(--white);
+            padding: 20px;
+            overflow-y: auto;
+            z-index: 1000;
+            transition: transform 0.3s;
+        }
+        
+        .sidebar-header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--gold);
+            margin-bottom: 20px;
+        }
+        
+        .sidebar-header h2 {
+            color: var(--gold);
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        
+        .user-info {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-top: 10px;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 5px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--white);
+            text-decoration: none;
+        }
+        
+        .menu-item:hover, .menu-item.active {
+            background: rgba(255, 215, 0, 0.2);
+            border-left: 4px solid var(--gold);
+        }
+        
+        .menu-item i {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+        
+        .menu-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .menu-section-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            opacity: 0.6;
+            margin-bottom: 10px;
+            padding-left: 15px;
+        }
+        
+        /* Conteúdo Principal */
+        .main-content {
+            margin-left: 260px;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            color: var(--navy);
+            font-size: 24px;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-icon {
+            background: var(--light-gray);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+        
+        .btn-icon:hover {
+            background: var(--gold);
+            transform: scale(1.1);
+        }
+        
+        /* Cards e Grid */
+        .card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light-gray);
+        }
+        
+        .card-title {
+            color: var(--navy);
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+            color: var(--white);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            border: 2px solid var(--gold);
+        }
+        
+        .stat-value {
+            font-size: 36px;
+            font-weight: bold;
+            color: var(--gold);
+            margin: 10px 0;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        /* Tabelas */
+        .table-container {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        th {
+            background: var(--navy);
+            color: var(--white);
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        tr:hover {
+            background: var(--light-gray);
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: var(--white);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal-header {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+            color: var(--white);
+            padding: 25px;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-body {
+            padding: 25px;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 28px;
+            cursor: pointer;
+        }
+        
+        /* Formulários */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            resize: vertical;
+            min-height: 100px;
+            font-family: inherit;
+        }
+        
+        /* Botões de ação */
+        .action-btns {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 13px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-edit {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+        
+        .btn-delete {
+            background: #ffebee;
+            color: #c62828;
+        }
+        
+        .btn-view {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+        
+        /* Abas */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--light-gray);
+            overflow-x: auto;
+        }
+        
+        .tab {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            color: #666;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            color: var(--navy);
+            border-bottom-color: var(--gold);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Animações */
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Loading */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: var(--white);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Copyright */
+        .copyright {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 12px;
+            border-top: 1px solid #e0e0e0;
+            margin-top: 40px;
+        }
+        
+        /* Seleção de usuário (admin) */
+        .user-selector {
+            background: var(--gold);
+            color: var(--navy);
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .user-selector select {
+            flex: 1;
+            padding: 8px;
+            border-radius: 5px;
+            border: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== TELA DE LOGIN ===== -->
+    <div id="loginScreen" class="auth-container">
+        <div class="auth-box">
+            <div class="auth-logo">
+                <h1>🏥 ASM Gestão Clínica</h1>
+                <p>Sistema Multi-Usuário PRO</p>
+            </div>
+            
+            <div id="loginAlert"></div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>E-mail</label>
+                    <input type="email" id="loginEmail" required placeholder="seu@email.com">
+                </div>
+                
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" id="loginPassword" required placeholder="••••••••">
+                </div>
+                
+                <button type="submit" class="btn btn-primary">
+                    <span id="loginBtnText">Entrar</span>
+                </button>
+            </form>
+            
+            <div class="auth-links">
+                <p>Primeiro acesso? <a onclick="showScreen('registerScreen')">Criar conta Admin</a></p>
+            </div>
+            
+            <div style="text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
+                <p style="font-size: 12px; color: #666;">
+                    <strong>CREFITO:</strong> 40.9314-F<br>
+                    Dra Andresa Augusto
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== TELA DE CADASTRO ADMIN ===== -->
+    <div id="registerScreen" class="auth-container hidden">
+        <div class="auth-box">
+            <div class="auth-logo">
+                <h1>📝 Criar Conta Admin</h1>
+                <p>Configure sua clínica</p>
+            </div>
+            
+            <div id="registerAlert"></div>
+            
+            <form id="registerForm">
+                <div class="form-group">
+                    <label>Nome da Clínica *</label>
+                    <input type="text" id="regClinicName" required placeholder="Ex: Clínica Bem Estar">
+                </div>
+                
+                <div class="form-group">
+                    <label>Seu Nome Completo *</label>
+                    <input type="text" id="regName" required placeholder="Seu nome">
+                </div>
+                
+                <div class="form-group">
+                    <label>E-mail *</label>
+                    <input type="email" id="regEmail" required placeholder="seu@email.com">
+                </div>
+                
+                <div class="form-group">
+                    <label>Profissão *</label>
+                    <select id="regProfession" required>
+                        <option value="">Selecione...</option>
+                        <option value="Fisioterapeuta">Fisioterapeuta</option>
+                        <option value="Psicólogo">Psicólogo</option>
+                        <option value="Fonoaudiólogo">Fonoaudiólogo</option>
+                        <option value="Médico">Médico</option>
+                        <option value="Nutricionista">Nutricionista</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Senha *</label>
+                    <input type="password" id="regPassword" required placeholder="Mínimo 6 caracteres" minlength="6">
+                </div>
+                
+                <div class="form-group">
+                    <label>Confirmar Senha *</label>
+                    <input type="password" id="regPasswordConfirm" required placeholder="Repita a senha">
+                </div>
+                
+                <button type="submit" class="btn btn-primary">
+                    <span id="regBtnText">Criar Conta</span>
+                </button>
+            </form>
+            
+            <div class="auth-links">
+                <p>Já tem conta? <a onclick="showScreen('loginScreen')">Fazer login</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== SISTEMA PRINCIPAL ===== -->
+    <div id="appContainer" class="app-container">
+        
+        <!-- Sidebar -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>🏥 ASM Clínica</h2>
+                <div class="user-info">
+                    <span id="sidebarUserName">Carregando...</span><br>
+                    <span class="badge" id="sidebarUserRole">...</span>
+                </div>
+            </div>
+            
+            <!-- Menu Admin -->
+            <div id="adminMenu" class="hidden">
+                <div class="menu-section">
+                    <div class="menu-section-title">Gestão</div>
+                    <div class="menu-item active" onclick="showSection('dashboard')">
+                        <span>📊</span> Dashboard
+                    </div>
+                    <div class="menu-item" onclick="showSection('users')">
+                        <span>👥</span> Usuários
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Menu Comum (todos veem) -->
+            <div class="menu-section">
+                <div class="menu-section-title">Operacional</div>
+                <div class="menu-item" onclick="showSection('agenda')" id="menuAgenda">
+                    <span>📅</span> Agenda Unificada
+                </div>
+                <div class="menu-item" onclick="showSection('pacientes')" id="menuPacientes">
+                    <span>🧑‍⚕️</span> Meus Pacientes
+                </div>
+                <div class="menu-item" onclick="showSection('financeiro')" id="menuFinanceiro">
+                    <span>💰</span> Meu Financeiro
+                </div>
+            </div>
+            
+            <div class="menu-section">
+                <div class="menu-section-title">Relatórios</div>
+                <div class="menu-item" onclick="showSection('relatorios')">
+                    <span>📈</span> Relatórios
+                </div>
+            </div>
+            
+            <div class="menu-section">
+                <div class="menu-item" onclick="logout()" style="color: #ff5252;">
+                    <span>🚪</span> Sair
+                </div>
+            </div>
+        </nav>
+
+        <!-- Conteúdo Principal -->
+        <main class="main-content">
+            
+            <!-- Header -->
+            <div class="header">
+                <h1 id="pageTitle">Dashboard</h1>
+                <div class="header-actions">
+                    <button class="btn-icon" onclick="showProfile()" title="Meu Perfil">👤</button>
+                    <button class="btn-icon" onclick="toggleSidebar()" title="Menu" class="mobile-only">☰</button>
+                </div>
+            </div>
+            
+            <!-- Seletor de Usuário (só Admin) -->
+            <div id="userSelector" class="user-selector hidden">
+                <span>👁️ Visualizando como:</span>
+                <select id="viewAsUser" onchange="changeUserView()">
+                    <option value="all">Todos os usuários</option>
+                </select>
+            </div>
+
+            <!-- ===== DASHBOARD ===== -->
+            <div id="dashboardSection" class="section-content">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Total Usuários</div>
+                        <div class="stat-value" id="statTotalUsers">1</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Pacientes Hoje</div>
+                        <div class="stat-value" id="statTodayPatients">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Faturamento Mês</div>
+                        <div class="stat-value" id="statMonthRevenue">R$0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Consultas Agendadas</div>
+                        <div class="stat-value" id="statAppointments">0</div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">👥 Usuários da Clínica</h2>
+                        <button class="btn-sm btn-primary" onclick="openModal('userModal')" style="background: var(--navy); color: white;">+ Novo Usuário</button>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Profissão</th>
+                                    <th>E-mail</th>
+                                    <th>Tipo</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableList">
+                                <tr>
+                                    <td colspan="5" style="text-align: center;">Carregando...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== GESTÃO DE USUÁRIOS (Admin) ===== -->
+            <div id="usersSection" class="section-content hidden">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">👥 Gerenciar Usuários</h2>
+                        <button class="btn-sm btn-primary" onclick="openModal('userModal')" style="background: var(--navy); color: white;">+ Adicionar Profissional</button>
+                    </div>
+                    <div id="usersList"></div>
+                </div>
+            </div>
+
+            <!-- ===== AGENDA ===== -->
+            <div id="agendaSection" class="section-content hidden">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">📅 Agenda Unificada</h2>
+                        <button class="btn-sm btn-primary" onclick="openModal('appointmentModal')" style="background: var(--navy); color: white;">+ Novo Agendamento</button>
+                    </div>
+                    <div id="agendaContent">
+                        <p>Calendário será carregado aqui...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== PACIENTES ===== -->
+            <div id="pacientesSection" class="section-content hidden">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">🧑‍⚕️ Meus Pacientes</h2>
+                        <button class="btn-sm btn-primary" onclick="openModal('patientModal')" style="background: var(--navy); color: white;">+ Novo Paciente</button>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Telefone</th>
+                                    <th>Última Consulta</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="patientsList">
+                                <tr>
+                                    <td colspan="4" style="text-align: center;">Nenhum paciente cadastrado</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== FINANCEIRO ===== -->
+            <div id="financeiroSection" class="section-content hidden">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Entradas</div>
+                        <div class="stat-value" id="finIncome">R$0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Saídas</div>
+                        <div class="stat-value" id="finExpense">R$0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Saldo</div>
+                        <div class="stat-value" id="finBalance">R$0</div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">💰 Lançamentos</h2>
+                        <button class="btn-sm btn-primary" onclick="openModal('transactionModal')" style="background: var(--navy); color: white;">+ Novo Lançamento</button>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Paciente</th>
+                                    <th>Tipo</th>
+                                    <th>Valor</th>
+                                    <th>Pagamento</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactionsList">
+                                <tr>
+                                    <td colspan="6" style="text-align: center;">Nenhum lançamento</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== RELATÓRIOS ===== -->
+            <div id="relatoriosSection" class="section-content hidden">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">📈 Relatórios</h2>
+                    </div>
+                    <div class="tabs">
+                        <button class="tab active" onclick="showTab('relFinanceiro')">Financeiro</button>
+                        <button class="tab" onclick="showTab('relAtendimentos')">Atendimentos</button>
+                        <button class="tab" onclick="showTab('relPacientes')">Pacientes</button>
+                    </div>
+                    
+                    <div id="relFinanceiro" class="tab-content active">
+                        <p>Relatório financeiro será implementado na Parte 4</p>
+                    </div>
+                    
+                    <div id="relAtendimentos" class="tab-content">
+                        <p>Relatório de atendimentos será implementado na Parte 4</p>
+                    </div>
+                    
+                    <div id="relPacientes" class="tab-content">
+                        <p>Relatório de pacientes será implementado na Parte 4</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="copyright">
+                <strong>ASM Gestão Clínica PRO</strong><br>
+                Dra Andresa Augusto - CREFITO 40.9314-F<br>
+                © 2026 - Proibida reprodução sem autorização
+            </div>
+        </main>
+    </div>
+
+    <!-- ===== MODAIS ===== -->
+    
+    <!-- Modal Novo Usuário -->
+    <div id="userModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>👤 Novo Profissional</h3>
+                <button class="close-btn" onclick="closeModal('userModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="userForm">
+                    <div class="form-group">
+                        <label>Nome Completo *</label>
+                        <input type="text" id="userName" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>E-mail *</label>
+                            <input type="email" id="userEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Profissão *</label>
+                            <select id="userProfession" required>
+                                <option value="">Selecione...</option>
+                                <option value="Fisioterapeuta">Fisioterapeuta</option>
+                                <option value="Psicólogo">Psicólogo</option>
+                                <option value="Fonoaudiólogo">Fonoaudiólogo</option>
+                                <option value="Médico">Médico</option>
+                                <option value="Nutricionista">Nutricionista</option>
+                                <option value="Outro">Outro</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Senha Temporária *</label>
+                        <input type="password" id="userPassword" required minlength="6" placeholder="Mínimo 6 caracteres">
+                        <small style="color: #666;">O usuário poderá alterar depois</small>
+                    </div>
+                    <button type="submit" class="btn btn-primary">💾 Criar Usuário</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Novo Paciente -->
+    <div id="patientModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🧑‍⚕️ Novo Paciente</h3>
+                <button class="close-btn" onclick="closeModal('patientModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="patientForm">
+                    <div class="form-group">
+                        <label>Nome Completo *</label>
+                        <input type="text" id="patientName" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Telefone *</label>
+                            <input type="text" id="patientPhone" required placeholder="(00) 00000-0000">
+                        </div>
+                        <div class="form-group">
+                            <label>E-mail</label>
+                            <input type="email" id="patientEmail" placeholder="opcional">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Data de Nascimento</label>
+                        <input type="date" id="patientBirth">
+                    </div>
+                    <div class="form-group">
+                        <label>Queixa Principal</label>
+                        <textarea id="patientComplaint" placeholder="Descreva a queixa principal do paciente..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">💾 Salvar Paciente</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Novo Agendamento -->
+    <div id="appointmentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📅 Novo Agendamento</h3>
+                <button class="close-btn" onclick="closeModal('appointmentModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="appointmentForm">
+                    <div class="form-group">
+                        <label>Paciente *</label>
+                        <input type="text" id="appPatientName" required placeholder="Nome do paciente">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Data *</label>
+                            <input type="date" id="appDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Hora *</label>
+                            <input type="time" id="appTime" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo de Atendimento *</label>
+                        <input type="text" id="appType" required placeholder="Ex: Avaliação, Sessão, Retorno...">
+                    </div>
+                    <div class="form-group">
+                        <label>Valor (R$)</label>
+                        <input type="number" id="appValue" step="0.01" placeholder="0,00">
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="appRecurring"> Paciente Fixo (Recorrente)
+                        </label>
+                    </div>
+                    <div id="recurringOptions" class="hidden" style="background: #f5f5f5; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                        <div class="form-group">
+                            <label>Repetir por quantas semanas?</label>
+                            <select id="appWeeks">
+                                <option value="4">4 semanas</option>
+                                <option value="8">8 semanas</option>
+                                <option value="12">12 semanas</option>
+                                <option value="52">1 ano</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">📅 Agendar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Lançamento Financeiro -->
+    <div id="transactionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>💰 Novo Lançamento</h3>
+                <button class="close-btn" onclick="closeModal('transactionModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="transactionForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Tipo *</label>
+                            <select id="transType" required>
+                                <option value="income">Entrada</option>
+                                <option value="expense">Saída</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Valor (R$) *</label>
+                            <input type="number" id="transValue" step="0.01" required placeholder="0,00">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Descrição / Tipo de Atendimento *</label>
+                        <input type="text" id="transDesc" required placeholder="Ex: Avaliação Fisioterapia, Sessão Psicologia...">
+                    </div>
+                    <div class="form-group">
+                        <label>Forma de Pagamento *</label>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button type="button" class="btn-payment" data-method="pix" onclick="selectPayment(this)" style="flex: 1; padding: 15px; border: 2px solid #ddd; border-radius: 10px; background: white; cursor: pointer;">
+                                💠<br>Pix
+                            </button>
+                            <button type="button" class="btn-payment" data-method="dinheiro" onclick="selectPayment(this)" style="flex: 1; padding: 15px; border: 2px solid #ddd; border-radius: 10px; background: white; cursor: pointer;">
+                                💵<br>Dinheiro
+                            </button>
+                            <button type="button" class="btn-payment" data-method="cartao" onclick="selectPayment(this)" style="flex: 1; padding: 15px; border: 2px solid #ddd; border-radius: 10px; background: white; cursor: pointer;">
+                                💳<br>Cartão
+                            </button>
+                        </div>
+                        <input type="hidden" id="transPaymentMethod" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Data</label>
+                        <input type="date" id="transDate" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">💾 Salvar Lançamento</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== CONFIGURAÇÃO SUPABASE =====
+        // SUBSTITUA ESTES VALORES PELOS SEUS DO SUPABASE!
+        const SUPABASE_URL = 'https://nycjicdhwamnivfyhhst.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55Y2ppY2Rod2Ftbml2ZnloaHN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1NDkwOTAsImV4cCI6MjA4NzEyNTA5MH0.c0TZ46vwHCu4Ta1AAlMEtipyvCv3eRNV33mtaxLNL7g';
+        
+        let supabase;
+        let currentUser = null;
+        let currentProfile = null;
+        let currentClinic = null;
+        let clinicUsers = [];
+        let viewingAsUser = null; // Para admin ver como outro usuário
+        
+        // ===== INICIALIZAÇÃO =====
+        function initSupabase() {
+            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+            checkSession();
+        }
+        
+        async function checkSession() {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) {
+                currentUser = session.user;
+                await loadUserProfile();
+            } else {
+                showScreen('loginScreen');
+            }
+        }
+        
+        // ===== NAVEGAÇÃO =====
+        function showScreen(screenId) {
+            document.querySelectorAll('.auth-container').forEach(el => el.classList.add('hidden'));
+            const screen = document.getElementById(screenId);
+            if (screen) screen.classList.remove('hidden');
+        }
+        
+        function showSection(section) {
+            // Esconde todas as seções
+            document.querySelectorAll('.section-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
+            
+            // Mostra a seção selecionada
+            const sectionEl = document.getElementById(section + 'Section');
+            if (sectionEl) {
+                sectionEl.classList.remove('hidden');
+                sectionEl.classList.add('fade-in');
+            }
+            
+            // Atualiza título
+            const titles = {
+                dashboard: 'Dashboard',
+                users: 'Gestão de Usuários',
+                agenda: 'Agenda Unificada',
+                pacientes: 'Meus Pacientes',
+                financeiro: 'Meu Financeiro',
+                relatorios: 'Relatórios'
+            };
+            document.getElementById('pageTitle').textContent = titles[section] || section;
+            
+            // Marca menu ativo
+            const menuMap = {
+                dashboard: 'adminMenu',
+                users: null,
+                agenda: 'menuAgenda',
+                pacientes: 'menuPacientes',
+                financeiro: 'menuFinanceiro',
+                relatorios: null
+            };
+            
+            // Carrega dados específicos
+            if (section === 'dashboard') loadDashboard();
+            if (section === 'users') loadUsers();
+            if (section === 'agenda') loadAgenda();
+            if (section === 'pacientes') loadPatients();
+            if (section === 'financeiro') loadFinance();
+        }
+        
+        function showTab(tabName) {
+            // Remove active de todas as abas
+            event.target.parentElement.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Esconde todos os conteúdos
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+        }
+        
+        // ===== AUTENTICAÇÃO =====
+        
+        // Login
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('loginBtnText');
+            btn.innerHTML = '<span class="loading"></span>';
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+            
+            if (error) {
+                showAlert('loginAlert', error.message, 'error');
+                btn.textContent = 'Entrar';
+            } else {
+                currentUser = data.user;
+                await loadUserProfile();
+            }
+        });
+        
+        // Cadastro Admin
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('regBtnText');
+            btn.innerHTML = '<span class="loading"></span>';
+            
+            const clinicName = document.getElementById('regClinicName').value;
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const profession = document.getElementById('regProfession').value;
+            const password = document.getElementById('regPassword').value;
+            const confirm = document.getElementById('regPasswordConfirm').value;
+            
+            if (password !== confirm) {
+                showAlert('registerAlert', 'As senhas não conferem!', 'error');
+                btn.textContent = 'Criar Conta';
+                return;
+            }
+            
+            // Criar usuário no Auth
+            const { data, error } = await supabase.auth.signUp({
+                email,
+                password,
+                options: {
+                    data: { name, role: 'admin' }
+                }
+            });
+            
+            if (error) {
+                showAlert('registerAlert', error.message, 'error');
+                btn.textContent = 'Criar Conta';
+                return;
+            }
+            
+            // Criar clínica
+            const { data: clinic } = await supabase
+                .from('clinics')
+                .insert([{ name: clinicName, admin_id: data.user.id }])
+                .select()
+                .single();
+            
+            // Criar perfil do admin
+            await supabase.from('profiles').insert([{
+                id: data.user.id,
+                clinic_id: clinic.id,
+                name: name,
+                email: email,
+                profession: profession,
+                role: 'admin',
+                created_at: new Date().toISOString()
+            }]);
+            
+            showAlert('registerAlert', 'Conta criada! Faça login.', 'success');
+            setTimeout(() => showScreen('loginScreen'), 2000);
+        });
+        
+        // Carregar perfil do usuário
+        async function loadUserProfile() {
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('*, clinics(*)')
+                .eq('id', currentUser.id)
+                .single();
+            
+            if (!profile) {
+                showAlert('loginAlert', 'Perfil não encontrado', 'error');
+                return;
+            }
+            
+            currentProfile = profile;
+            currentClinic = profile.clinics;
+            
+            // Atualizar sidebar
+            document.getElementById('sidebarUserName').textContent = profile.name;
+            document.getElementById('sidebarUserRole').textContent = profile.role === 'admin' ? 'ADMIN' : profile.profession;
+            document.getElementById('sidebarUserRole').className = 'badge ' + (profile.role === 'admin' ? 'badge-admin' : 'badge-user');
+            
+            // Mostrar/esconder menus de admin
+            if (profile.role === 'admin') {
+                document.getElementById('adminMenu').classList.remove('hidden');
+                document.getElementById('userSelector').classList.remove('hidden');
+                loadClinicUsers();
+            } else {
+                document.getElementById('adminMenu').classList.add('hidden');
+                document.getElementById('userSelector').classList.add('hidden');
+            }
+            
+            // Mostrar app
+            document.querySelectorAll('.auth-container').forEach(el => el.classList.add('hidden'));
+            document.getElementById('appContainer').style.display = 'block';
+            
+            // Carregar dashboard
+            showSection('dashboard');
+        }
+        
+        // Carregar usuários da clínica (para admin)
+        async function loadClinicUsers() {
+            if (!currentClinic) return;
+            
+            const { data: users } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('clinic_id', currentClinic.id);
+            
+            clinicUsers = users || [];
+            
+            // Atualizar seletor
+            const select = document.getElementById('viewAsUser');
+            select.innerHTML = '<option value="all">Todos os usuários</option>';
+            clinicUsers.forEach(u => {
+                select.innerHTML += `<option value="${u.id}">${u.name} (${u.profession})</option>`;
+            });
+            
+            // Atualizar tabela
+            const tbody = document.getElementById('usersTableList');
+            if (clinicUsers.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Nenhum usuário</td></tr>';
+            } else {
+                tbody.innerHTML = clinicUsers.map(u => `
+                    <tr>
+                        <td><strong>${u.name}</strong></td>
+                        <td>${u.profession}</td>
+                        <td>${u.email}</td>
+                        <td><span class="badge ${u.role === 'admin' ? 'badge-admin' : 'badge-user'}">${u.role === 'admin' ? 'Admin' : 'Profissional'}</span></td>
+                        <td>Ativo</td>
+                    </tr>
+                `).join('');
+            }
+            
+            document.getElementById('statTotalUsers').textContent = clinicUsers.length;
+        }
+        
+        // Admin mudar visão
+        function changeUserView() {
+            const userId = document.getElementById('viewAsUser').value;
+            viewingAsUser = userId === 'all' ? null : userId;
+            
+            // Recarregar dados conforme visão selecionada
+            const currentSection = document.querySelector('.section-content:not(.hidden)').id;
+            if (currentSection === 'pacientesSection') loadPatients();
+            if (currentSection === 'financeiroSection') loadFinance();
+        }
+        
+        // ===== GESTÃO DE USUÁRIOS =====
+        document.getElementById('userForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('userName').value;
+            const email = document.getElementById('userEmail').value;
+            const profession = document.getElementById('userProfession').value;
+            const password = document.getElementById('userPassword').value;
+            
+            // Criar usuário no Auth (usando service role key no backend idealmente)
+            // Por enquanto, vamos criar um convite
+            const { data, error } = await supabase.auth.signUp({
+                email,
+                password,
+                options: {
+                    data: { name, role: 'user' }
+                }
+            });
+            
+            if (error) {
+                alert('Erro: ' + error.message);
+                return;
+            }
+            
+            // Criar perfil vinculado à clínica
+            await supabase.from('profiles').insert([{
+                id: data.user.id,
+                clinic_id: currentClinic.id,
+                name: name,
+                email: email,
+                profession: profession,
+                role: 'user',
+                created_at: new Date().toISOString()
+            }]);
+            
+            closeModal('userModal');
+            loadClinicUsers();
+            alert('Usuário criado! Senha temporária: ' + password);
+            document.getElementById('userForm').reset();
+        });
+        
+        // ===== DASHBOARD =====
+        async function loadDashboard() {
+            // Implementar na Parte 2
+        }
+        
+        // ===== AGENDA =====
+        async function loadAgenda() {
+            // Implementar na Parte 2
+        }
+        
+        // ===== PACIENTES =====
+        async function loadPatients() {
+            // Implementar na Parte 3
+        }
+        
+        // ===== FINANCEIRO =====
+        async function loadFinance() {
+            // Implementar na Parte 3
+        }
+        
+        // ===== MODAIS =====
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+        }
+        
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+        
+        // Selecionar forma de pagamento
+        function selectPayment(btn) {
+            document.querySelectorAll('.btn-payment').forEach(b => {
+                b.style.borderColor = '#ddd';
+                b.style.background = 'white';
+            });
+            btn.style.borderColor = 'var(--gold)';
+            btn.style.background = '#fff8e1';
+            document.getElementById('transPaymentMethod').value = btn.dataset.method;
+        }
+        
+        // Toggle recorrência
+        document.getElementById('appRecurring')?.addEventListener('change', function() {
+            document.getElementById('recurringOptions').classList.toggle('hidden', !this.checked);
+        });
+        
+        // ===== UTILITÁRIOS =====
+        function showAlert(elementId, message, type) {
+            const el = document.getElementById(elementId);
+            el.className = `alert alert-${type}`;
+            el.textContent = message;
+            setTimeout(() => el.textContent = '', 5000);
+        }
+        
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+        
+        async function logout() {
+            await supabase.auth.signOut();
+            location.reload();
+        }
+        
+        function showProfile() {
+            alert('Perfil - implementar na Parte 4');
+        }
+        
+        // Inicializar
+        window.onload = initSupabase;
+    </script>
+</body>
+</html>
 
