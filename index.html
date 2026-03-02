@@ -3,496 +3,1352 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ASM Gestão Clínica - Apresentação</title>
+<title>ASM Gestão Clínica – REVARA Pro | Sistema Completo para Clínicas</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f8fafc;
-    color: #1e293b;
-    line-height: 1.6;
-}
-.page {
-    width: 210mm;
-    min-height: 297mm;
-    margin: 0 auto 20px;
-    background: white;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-    position: relative;
-    overflow: hidden;
-}
-/* PÁGINA 1 - CAPA */
-.page-1 {
-    background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 50%, #1e3a5f 100%);
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 60px;
-}
-.page-1 .logo-area {
-    margin-bottom: 40px;
-}
-.page-1 .logo-icon {
-    font-size: 80px;
-    margin-bottom: 20px;
-}
-.page-1 h1 {
-    font-size: 52px;
-    font-weight: 800;
-    margin-bottom: 15px;
-    letter-spacing: -1px;
-}
-.page-1 .subtitle {
-    font-size: 24px;
-    opacity: 0.9;
-    margin-bottom: 50px;
-    font-weight: 300;
-}
-.page-1 .tagline {
-    font-size: 28px;
-    font-weight: 600;
-    margin-bottom: 60px;
-    padding: 20px 40px;
-    border: 3px solid rgba(255,255,255,0.3);
-    border-radius: 15px;
-    background: rgba(255,255,255,0.1);
-}
-.page-1 .author {
-    font-size: 18px;
-    opacity: 0.8;
-    margin-top: auto;
-}
-.page-1 .author strong {
-    display: block;
-    font-size: 22px;
-    margin-top: 10px;
-    opacity: 1;
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* PÁGINA 2 - O PROBLEMA E SOLUÇÃO */
-.page-2 {
-    padding: 60px;
-    background: white;
-}
-.page-2 .header {
-    text-align: center;
-    margin-bottom: 50px;
-}
-.page-2 .header h2 {
-    color: #1e3a5f;
-    font-size: 36px;
-    margin-bottom: 15px;
-}
-.page-2 .header .line {
-    width: 100px;
-    height: 4px;
-    background: linear-gradient(90deg, #1e3a5f, #d4af37);
-    margin: 0 auto;
-}
-.problem-solution {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-    margin-bottom: 50px;
-}
-.box {
-    padding: 35px;
-    border-radius: 15px;
-}
-.problem-box {
-    background: #fef2f2;
-    border-left: 5px solid #ef4444;
-}
-.solution-box {
-    background: #f0fdf4;
-    border-left: 5px solid #22c55e;
-}
-.box h3 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-.problem-box h3 { color: #dc2626; }
-.solution-box h3 { color: #16a34a; }
-.box ul {
-    list-style: none;
-}
-.box li {
-    padding: 10px 0;
-    padding-left: 30px;
-    position: relative;
-    font-size: 16px;
-}
-.box li:before {
-    position: absolute;
-    left: 0;
-    font-weight: bold;
-}
-.problem-box li:before { content: "✗"; color: #ef4444; }
-.solution-box li:before { content: "✓"; color: #22c55e; }
-
-.highlight-box {
-    background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%);
-    color: white;
-    padding: 40px;
-    border-radius: 15px;
-    text-align: center;
-}
-.highlight-box h3 {
-    font-size: 28px;
-    margin-bottom: 20px;
-}
-.highlight-box p {
-    font-size: 18px;
-    opacity: 0.95;
+:root {
+  --navy: #1e3a5f;
+  --navy-dark: #152a45;
+  --navy-light: #2c5282;
+  --gold: #d69e2e;
+  --gold-light: #ecc94b;
+  --white: #ffffff;
+  --gray: #f7fafc;
+  --text: #2d3748;
 }
 
-/* PÁGINA 3 - FUNCIONALIDADES */
-.page-3 {
-    padding: 60px;
-    background: #f8fafc;
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: var(--white);
+  color: var(--text);
+  overflow-x: hidden;
 }
-.page-3 .header {
-    text-align: center;
-    margin-bottom: 50px;
+
+/* HERO - SEM PREÇO */
+.hero {
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 40px 20px;
+  position: relative;
+  overflow: hidden;
 }
-.page-3 .header h2 {
-    color: #1e3a5f;
-    font-size: 36px;
-    margin-bottom: 15px;
+
+.hero::before {
+  content: '';
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(214,158,46,0.1) 0%, transparent 70%);
+  animation: pulse 4s ease-in-out infinite;
 }
-.page-3 .header .line {
-    width: 100px;
-    height: 4px;
-    background: linear-gradient(90deg, #1e3a5f, #d4af37);
-    margin: 0 auto;
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.1); opacity: 0.8; }
 }
+
+.logo-container {
+  margin-bottom: 40px;
+  z-index: 2;
+}
+
+.logo-circle {
+  width: 140px;
+  height: 140px;
+  background: var(--white);
+  border: 4px solid var(--gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+}
+
+.logo-text {
+  color: var(--navy);
+  font-size: 42px;
+  font-weight: 900;
+  letter-spacing: 3px;
+}
+
+.hero h1 {
+  color: var(--white);
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 800;
+  margin-bottom: 20px;
+  z-index: 2;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+
+.hero h1 span {
+  color: var(--gold);
+}
+
+.hero-subtitle {
+  color: rgba(255,255,255,0.9);
+  font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+  max-width: 900px;
+  margin-bottom: 40px;
+  z-index: 2;
+  line-height: 1.6;
+}
+
+.hero-features {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 40px;
+  z-index: 2;
+}
+
+.hero-feature {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  padding: 15px 25px;
+  border-radius: 50px;
+  color: white;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.cta-scroll {
+  background: transparent;
+  color: var(--gold);
+  padding: 15px 40px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+  z-index: 2;
+  border: 2px solid var(--gold);
+  cursor: pointer;
+}
+
+.cta-scroll:hover {
+  background: var(--gold);
+  color: var(--navy-dark);
+  transform: translateY(-3px);
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 30px;
+  color: var(--gold);
+  font-size: 2rem;
+  animation: bounce 2s infinite;
+  z-index: 2;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(10px); }
+}
+
+/* SECTIONS */
+section {
+  padding: 100px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.section-title h2 {
+  color: var(--navy);
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 15px;
+}
+
+.section-title h2 span {
+  color: var(--gold);
+}
+
+.section-title p {
+  color: #718096;
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* PROBLEM SECTION */
+.problem {
+  background: var(--gray);
+}
+
+.problem-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+.problem-card {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+  border-top: 4px solid var(--navy);
+}
+
+.problem-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+}
+
+.problem-card .icon {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.problem-card h3 {
+  color: var(--navy);
+  font-size: 1.3rem;
+  margin-bottom: 15px;
+}
+
+.problem-card p {
+  color: #718096;
+  line-height: 1.6;
+}
+
+/* SOLUTION SECTION */
+.solution {
+  background: var(--navy);
+  color: white;
+  position: relative;
+}
+
+.solution::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+.solution .section-title h2 {
+  color: white;
+}
+
+.solution .section-title p {
+  color: rgba(255,255,255,0.8);
+}
+
 .features-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 25px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  position: relative;
+  z-index: 1;
 }
+
 .feature-card {
-    background: white;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-    border-top: 4px solid #1e3a5f;
-    transition: transform 0.3s;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  padding: 35px;
+  border-radius: 15px;
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: all 0.3s ease;
 }
+
 .feature-card:hover {
-    transform: translateY(-5px);
+  background: rgba(255,255,255,0.15);
+  transform: translateY(-5px);
+  border-color: var(--gold);
 }
+
 .feature-card .icon {
-    font-size: 40px;
-    margin-bottom: 15px;
+  width: 60px;
+  height: 60px;
+  background: var(--gold);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  margin-bottom: 20px;
 }
+
 .feature-card h3 {
-    color: #1e3a5f;
-    font-size: 20px;
-    margin-bottom: 12px;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: white;
 }
+
 .feature-card p {
-    color: #64748b;
-    font-size: 15px;
-    line-height: 1.6;
-}
-.feature-highlight {
-    background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%);
-    color: white;
-    grid-column: span 2;
-    text-align: center;
-    padding: 35px;
-}
-.feature-highlight h3 {
-    color: white;
-    font-size: 24px;
-    margin-bottom: 15px;
-}
-.feature-highlight p {
-    color: rgba(255,255,255,0.9);
-    font-size: 16px;
+  color: rgba(255,255,255,0.8);
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
 
-/* PÁGINA 4 - OFERTA */
-.page-4 {
-    padding: 60px;
-    background: white;
-    display: flex;
+/* PRODUCT INFO SECTION */
+.product-info {
+  background: white;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 40px;
+}
+
+.info-card {
+  background: var(--gray);
+  padding: 40px;
+  border-radius: 20px;
+  border-left: 5px solid var(--gold);
+}
+
+.info-card h3 {
+  color: var(--navy);
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.info-card ul {
+  list-style: none;
+}
+
+.info-card li {
+  padding: 12px 0;
+  border-bottom: 1px solid #e2e8f0;
+  color: #4a5568;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.info-card li::before {
+  content: '✓';
+  color: var(--gold);
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+/* BENEFITS SECTION */
+.benefits {
+  background: var(--gray);
+}
+
+.benefits-list {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.benefit-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 25px;
+  padding: 30px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+}
+
+.benefit-item:hover {
+  transform: translateX(10px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.benefit-number {
+  width: 50px;
+  height: 50px;
+  background: var(--navy);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.benefit-content h3 {
+  font-size: 1.3rem;
+  margin-bottom: 8px;
+  color: var(--navy);
+}
+
+.benefit-content p {
+  color: #718096;
+  line-height: 1.5;
+}
+
+/* HOW TO USE SECTION */
+.how-to-use {
+  background: var(--navy);
+  color: white;
+}
+
+.how-to-use .section-title h2 {
+  color: white;
+}
+
+.how-to-use .section-title p {
+  color: rgba(255,255,255,0.8);
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  position: relative;
+  z-index: 1;
+}
+
+.step-card {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  padding: 35px;
+  border-radius: 15px;
+  border: 1px solid rgba(255,255,255,0.1);
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.step-card:hover {
+  background: rgba(255,255,255,0.15);
+  transform: translateY(-5px);
+  border-color: var(--gold);
+}
+
+.step-number {
+  width: 60px;
+  height: 60px;
+  background: var(--gold);
+  color: var(--navy-dark);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin: 0 auto 20px;
+}
+
+.step-card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+  color: white;
+}
+
+.step-card p {
+  color: rgba(255,255,255,0.8);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* COMPARISON */
+.comparison {
+  background: white;
+}
+
+.comparison-wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
+  background: var(--gray);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+}
+
+.comparison-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 20px;
+  padding: 25px;
+  background: var(--navy);
+  color: white;
+  font-weight: 700;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+.comparison-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 20px;
+  padding: 20px 25px;
+  border-bottom: 1px solid #e2e8f0;
+  align-items: center;
+}
+
+.comparison-row:nth-child(even) {
+  background: rgba(30,58,95,0.03);
+}
+
+.comparison-row.feature {
+  text-align: left;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.comparison-row .check {
+  color: var(--gold);
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.comparison-row .cross {
+  color: #e53e3e;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+/* FAQ */
+.faq {
+  background: var(--gray);
+}
+
+.faq-list {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.faq-item {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+}
+
+.faq-item:hover {
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.faq-question {
+  padding: 25px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.faq-answer {
+  padding: 0 30px 25px;
+  color: #718096;
+  line-height: 1.6;
+  display: none;
+}
+
+.faq-item.active .faq-answer {
+  display: block;
+}
+
+.faq-item.active .faq-question::after {
+  transform: rotate(180deg);
+}
+
+.faq-question::after {
+  content: '▼';
+  font-size: 0.8rem;
+  transition: transform 0.3s ease;
+  color: var(--gold);
+}
+
+/* FINAL CTA - COM PREÇO */
+.final-cta {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+  text-align: center;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.final-cta::before {
+  content: '';
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(214,158,46,0.2) 0%, transparent 70%);
+  animation: pulse 4s ease-in-out infinite;
+}
+
+.final-cta h2 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.final-cta h2 span {
+  color: var(--gold);
+}
+
+.final-cta > p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  max-width: 700px;
+  margin: 0 auto 40px;
+  position: relative;
+  z-index: 1;
+}
+
+.urgency {
+  background: rgba(229,62,62,0.9);
+  color: white;
+  padding: 15px 30px;
+  border-radius: 50px;
+  display: inline-block;
+  margin-bottom: 30px;
+  font-weight: 600;
+  position: relative;
+  z-index: 1;
+  animation: pulse-red 2s ease-in-out infinite;
+}
+
+@keyframes pulse-red {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.updates-box {
+  background: rgba(56,161,105,0.2);
+  border: 2px solid #38a169;
+  color: white;
+  padding: 20px 30px;
+  border-radius: 15px;
+  display: inline-block;
+  margin-bottom: 30px;
+  position: relative;
+  z-index: 1;
+  max-width: 600px;
+}
+
+.updates-box strong {
+  color: #68d391;
+  display: block;
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+}
+
+.updates-box p {
+  margin: 0;
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.price-box {
+  background: var(--gold);
+  color: var(--navy-dark);
+  padding: 40px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-bottom: 30px;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 20px 60px rgba(214,158,46,0.4);
+}
+
+.price-box .old-price {
+  font-size: 1.8rem;
+  text-decoration: line-through;
+  opacity: 0.7;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.price-box .new-price {
+  font-size: 5rem;
+  font-weight: 900;
+  display: block;
+  line-height: 1;
+}
+
+.price-box .installment {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  display: block;
+  margin-top: 15px;
+  font-weight: 600;
+}
+
+.cta-whatsapp {
+  background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+  color: white;
+  padding: 25px 60px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 1.4rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 15px;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 15px 40px rgba(37,211,102,0.4);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.cta-whatsapp:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 20px 50px rgba(37,211,102,0.5);
+}
+
+.guarantee {
+  margin-top: 40px;
+  padding: 25px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 15px;
+  display: inline-flex;
+  align-items: center;
+  gap: 20px;
+  position: relative;
+  z-index: 1;
+  max-width: 500px;
+}
+
+.guarantee-icon {
+  font-size: 3rem;
+}
+
+.guarantee-text {
+  text-align: left;
+}
+
+.guarantee-text strong {
+  display: block;
+  font-size: 1.2rem;
+  margin-bottom: 5px;
+}
+
+.guarantee-text span {
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.contact-info {
+  margin-top: 40px;
+  position: relative;
+  z-index: 1;
+  color: rgba(255,255,255,0.8);
+  font-size: 0.9rem;
+}
+
+.contact-info strong {
+  color: var(--gold);
+  display: block;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+}
+
+/* FOOTER */
+footer {
+  background: var(--navy-dark);
+  color: white;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+footer p {
+  opacity: 0.8;
+  font-size: 0.9rem;
+}
+
+.copyright {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  font-size: 0.8rem;
+  opacity: 0.6;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .hero-features {
     flex-direction: column;
-}
-.page-4 .header {
+    gap: 15px;
+  }
+  
+  .comparison-header,
+  .comparison-row {
+    grid-template-columns: 1fr;
     text-align: center;
-    margin-bottom: 40px;
-}
-.page-4 .header h2 {
-    color: #1e3a5f;
-    font-size: 36px;
-    margin-bottom: 15px;
-}
-.page-4 .header .line {
-    width: 100px;
-    height: 4px;
-    background: linear-gradient(90deg, #1e3a5f, #d4af37);
-    margin: 0 auto;
-}
-.offer-box {
-    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-    border: 3px solid #1e3a5f;
-    border-radius: 20px;
-    padding: 50px;
+  }
+  
+  .comparison-row.feature {
     text-align: center;
-    margin-bottom: 40px;
-}
-.offer-box .price-original {
-    font-size: 28px;
-    color: #94a3b8;
-    text-decoration: line-through;
-    margin-bottom: 10px;
-}
-.offer-box .price-promo {
-    font-size: 72px;
-    font-weight: 800;
-    color: #1e3a5f;
-    line-height: 1;
-    margin-bottom: 10px;
-}
-.offer-box .price-promo span {
-    font-size: 36px;
-    vertical-align: super;
-}
-.offer-box .price-label {
-    font-size: 20px;
-    color: #16a34a;
-    font-weight: 600;
-    margin-bottom: 30px;
-}
-.offer-box .economy {
-    background: #dcfce7;
-    color: #166534;
-    padding: 15px 30px;
-    border-radius: 30px;
-    font-size: 18px;
-    font-weight: 600;
-    display: inline-block;
-}
-.cta-section {
-    text-align: center;
-    margin-top: auto;
-}
-.cta-button {
-    background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+    background: var(--navy);
     color: white;
-    padding: 25px 60px;
-    font-size: 24px;
     font-weight: 700;
-    border: none;
-    border-radius: 15px;
-    cursor: pointer;
-    box-shadow: 0 10px 30px rgba(22, 163, 74, 0.3);
-    margin-bottom: 20px;
-    text-decoration: none;
-    display: inline-block;
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-.cta-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 40px rgba(22, 163, 74, 0.4);
-}
-.cta-text {
-    font-size: 18px;
-    color: #475569;
-    margin-bottom: 40px;
-}
-.footer-info {
+  }
+  
+  .benefit-item {
+    flex-direction: column;
     text-align: center;
-    margin-top: 40px;
-    padding-top: 30px;
-    border-top: 2px solid #e2e8f0;
-}
-.footer-info p {
-    color: #64748b;
-    font-size: 14px;
-    margin-bottom: 10px;
-}
-.footer-info .brand {
-    color: #1e3a5f;
-    font-weight: 700;
-    font-size: 18px;
+  }
+  
+  .cta-whatsapp {
+    padding: 20px 40px;
+    font-size: 1.2rem;
+  }
+  
+  .price-box .new-price {
+    font-size: 3.5rem;
+  }
+  
+  .guarantee {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .guarantee-text {
+    text-align: center;
+  }
+  
+  .updates-box {
+    margin: 0 20px 30px;
+  }
 }
 
-@media print {
-    body { background: white; }
-    .page { 
-        box-shadow: none; 
-        margin: 0; 
-        page-break-after: always;
-    }
-    .page:last-child { page-break-after: avoid; }
-    .cta-button {
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-    }
+/* ANIMATIONS */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s ease;
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
 }
 </style>
 </head>
 <body>
 
-<!-- PÁGINA 1: CAPA -->
-<div class="page page-1">
-    <div class="logo-area">
-        <div class="logo-icon">🔷</div>
-        <h1>ASM Gestão Clínica</h1>
-        <p class="subtitle">Sistema Completo para Gestão de Clínicas e Consultórios</p>
+<!-- HERO - SEM PREÇO -->
+<section class="hero">
+  <div class="logo-container">
+    <div class="logo-circle">
+      <span class="logo-text">ASM</span>
     </div>
-    
-    <div class="tagline">
-        Profissionalize sua clínica em poucos cliques
-    </div>
-    
-    <div class="author">
-        Desenvolvido por<br>
-        <strong>Dra. Andresa Augusto</strong><br>
-        Fisioterapeuta | CREFITO 40.9314-F
-    </div>
-</div>
+    <p style="color: var(--gold); font-weight: 700; letter-spacing: 3px; font-size: 1.2rem;">GESTÃO CLÍNICA</p>
+  </div>
+  
+  <h1>REVARA <span>Pro</span></h1>
+  <p class="hero-subtitle">
+    O sistema completo de gestão para clínicas e profissionais da saúde que querem 
+    <strong>organizar agenda, financeiro e prontuários</strong> em um só lugar, com acesso em qualquer dispositivo
+  </p>
+  
+  <div class="hero-features">
+    <div class="hero-feature">☁️ 100% na Nuvem</div>
+    <div class="hero-feature">👥 Até 7 Usuários</div>
+    <div class="hero-feature">🔒 Dados Protegidos</div>
+    <div class="hero-feature">📱 WhatsApp Integrado</div>
+  </div>
+  
+  <button onclick="document.getElementById('sobre').scrollIntoView({behavior: 'smooth'})" class="cta-scroll">
+    Conhecer o Sistema ↓
+  </button>
+  
+  <div class="scroll-indicator">↓</div>
+</section>
 
-<!-- PÁGINA 2: O PROBLEMA VS SOLUÇÃO -->
-<div class="page page-2">
-    <div class="header">
-        <h2>Por que sua clínica precisa disso?</h2>
-        <div class="line"></div>
+<!-- PROBLEM -->
+<section class="problem" id="sobre">
+  <div class="section-title reveal">
+    <h2>Você se identifica com <span>alguma dessas situações?</span></h2>
+    <p>A gestão da clínica não precisa ser um caos. Veja se você passa por isso:</p>
+  </div>
+  
+  <div class="problem-grid">
+    <div class="problem-card reveal">
+      <div class="icon">😰</div>
+      <h3>Agenda Bagunçada</h3>
+      <p>Anotações espalhadas em cadernos, planilhas complicadas e agendamentos se perdendo no WhatsApp</p>
     </div>
     
-    <div class="problem-solution">
-        <div class="box problem-box">
-            <h3>❌ Sem gestão adequada</h3>
-            <ul>
-                <li>Agenda desorganizada no papel ou caderno</li>
-                <li>Esquecimento de atendimentos e retornos</li>
-                <li>Perda de dinheiro com controle financeiro precário</li>
-                <li>Dificuldade para cobrar pacientes inadimplentes</li>
-                <li>Prontuários espalhados e difíceis de encontrar</li>
-                <li>Falta de visão do crescimento da clínica</li>
-                <li>Impressão amadora para seus pacientes</li>
-            </ul>
-        </div>
-        
-        <div class="box solution-box">
-            <h3>✅ Com ASM Gestão Clínica</h3>
-            <ul>
-                <li>Agenda digital compartilhada entre profissionais</li>
-                <li>Lembretes automáticos e controle total</li>
-                <li>Fluxo de caixa organizado e em tempo real</li>
-                <li>Cobranças via WhatsApp em poucos cliques</li>
-                <li>Prontuário eletrônico completo e acessível</li>
-                <li>Relatórios e gráficos de desempenho</li>
-                <li>Imagem profissional que encanta pacientes</li>
-            </ul>
-        </div>
+    <div class="problem-card reveal">
+      <div class="icon">💸</div>
+      <h3>Financeiro Confuso</h3>
+      <p>Não sabe quanto recebeu este mês, quem ainda deve e se está no lucro ou prejuízo</p>
     </div>
     
-    <div class="highlight-box">
-        <h3>🎯 Criado por quem entende do seu dia a dia</h3>
-        <p>Este não é um sistema genérico. Foi desenvolvido por uma fisioterapeuta que vive os mesmos desafios que você, 
-        pensando em cada detalhe que uma clínica real precisa.</p>
+    <div class="problem-card reveal">
+      <div class="icon">📋</div>
+      <h3>Prontuários Perdidos</h3>
+      <p>Fichas de papel empilhadas, evoluções sem organização e dificuldade para acompanhar o paciente</p>
     </div>
-</div>
+    
+    <div class="problem-card reveal">
+      <div class="icon">⏰</div>
+      <h3>Tempo Desperdiçado</h3>
+      <p>Horas gastas em tarefas administrativas que poderiam estar automatizadas</p>
+    </div>
+    
+    <div class="problem-card reveal">
+      <div class="icon">👥</div>
+      <h3>Equipe Desorganizada</h3>
+      <p>Vários profissionais usando métodos diferentes e informações não centralizadas</p>
+    </div>
+    
+    <div class="problem-card reveal">
+      <div class="icon">📱</div>
+      <h3>Cobrança Manual</h3>
+      <p>Enviando mensagens de cobrança uma a uma, sem controle do que já foi pago</p>
+    </div>
+  </div>
+</section>
 
-<!-- PÁGINA 3: FUNCIONALIDADES -->
-<div class="page page-3">
-    <div class="header">
-        <h2>Tudo que você recebe</h2>
-        <div class="line"></div>
+<!-- SOLUTION -->
+<section class="solution">
+  <div class="section-title reveal">
+    <h2>Conheça o <span>REVARA Pro</span></h2>
+    <p>Tudo que você precisa para profissionalizar sua clínica em um único sistema</p>
+  </div>
+  
+  <div class="features-grid">
+    <div class="feature-card reveal">
+      <div class="icon">📅</div>
+      <h3>Agenda Inteligente</h3>
+      <p>Visualização mensal e semanal, agendamentos por cor de profissional, recorrência automática (semanal e quinzenal) e alertas de conflito de horário</p>
     </div>
     
-    <div class="features-grid">
-        <div class="feature-card">
-            <div class="icon">📅</div>
-            <h3>Agenda Compartilhada</h3>
-            <p>Até 6 profissionais visualizam a mesma agenda. Cada um edita apenas seus atendimentos. Agendamentos recorrentes automáticos.</p>
-        </div>
-        
-        <div class="feature-card">
-            <div class="icon">👥</div>
-            <h3>Cadastro de Pacientes</h3>
-            <p>Ficha completa com dados, histórico, queixa principal e valor padrão. Busca rápida e organização inteligente.</p>
-        </div>
-        
-        <div class="feature-card">
-            <div class="icon">💰</div>
-            <h3>Controle Financeiro</h3>
-            <p>Controle de receitas e despesas. Visualização de pendências. Integração com Pix. Relatórios mensais detalhados.</p>
-        </div>
-        
-        <div class="feature-card">
-            <div class="icon">📱</div>
-            <h3>Cobrança via WhatsApp</h3>
-            <p>Envie cobranças personalizadas direto pelo sistema. Mensagens profissionais com sua assinatura e dados do paciente.</p>
-        </div>
-        
-        <div class="feature-card">
-            <div class="icon">📋</div>
-            <h3>Evolução Clínica</h3>
-            <p>Registro completo de evoluções por paciente. Histórico cronológico. Geração de relatórios em PDF para convênios.</p>
-        </div>
-        
-        <div class="feature-card">
-            <div class="icon">📊</div>
-            <h3>Dashboard e Gráficos</h3>
-            <p>Visualize seu faturamento, ticket médio, atendimentos por tipo e formas de pagamento. Exporte relatórios em PDF.</p>
-        </div>
-        
-        <div class="feature-card">
-            <div class="icon">📄</div>
-            <h3>Relatórios em PDF</h3>
-            <p>Gere relatórios mensais, de pacientes e de agenda em PDF profissional. Pronto para impressão ou envio digital.</p>
-        </div>
-        
-        <div class="feature-card">
-            <div class="icon">📤</div>
-            <h3>Exportação Excel</h3>
-            <p>Exporte sua agenda para Excel. Compatível com qualquer planilha. Facilite sua contabilidade e organização.</p>
-        </div>
-        
-        <div class="feature-card feature-highlight">
-            <h3>🔒 Sistema 100% na Nuvem</h3>
-            <p>Acesse de qualquer dispositivo: celular, tablet ou computador. Seus dados seguros no Firebase Google. 
-            Sem instalação, sem complicação. Ativação imediata após a compra.</p>
-        </div>
+    <div class="feature-card reveal">
+      <div class="icon">💰</div>
+      <h3>Controle Financeiro Total</h3>
+      <p>Recebido vs A Receber com filtro por mês, fluxo de caixa completo, despesas categorizadas e relatórios automáticos por profissional</p>
     </div>
-</div>
+    
+    <div class="feature-card reveal">
+      <div class="icon">👤</div>
+      <h3>Ficha do Paciente Completa</h3>
+      <p>Dados pessoais com CPF e data de nascimento, histórico financeiro, evolução clínica com 10 campos personalizados e relatórios em PDF</p>
+    </div>
+    
+    <div class="feature-card reveal">
+      <div class="icon">📊</div>
+      <h3>Dashboard Profissional</h3>
+      <p>Gráficos de faturamento, ticket médio, atendimentos por tipo, aniversariantes do mês e projeções com filtro de período</p>
+    </div>
+    
+    <div class="feature-card reveal">
+      <div class="icon">👥</div>
+      <h3>Multiusuário com Segurança</h3>
+      <p>Até 6 terapeutas + 1 secretária por código, cada um com PIN de 4 dígitos para proteger dados financeiros e relatórios</p>
+    </div>
+    
+    <div class="feature-card reveal">
+      <div class="icon">📱</div>
+      <h3>Integração WhatsApp</h3>
+      <p>Envie confirmações, cobranças em massa, relatórios de evolução e mensagens de aniversário direto do sistema</p>
+    </div>
+    
+    <div class="feature-card reveal">
+      <div class="icon">📄</div>
+      <h3>Relatórios e PDFs Profissionais</h3>
+      <p>Recibos, relatórios de produtividade, absenteísmo (faltas justificadas/não justificadas), exportação para Excel e PDFs assinados</p>
+    </div>
+    
+    <div class="feature-card reveal">
+      <div class="icon">☁️</div>
+      <h3>Firebase Google Cloud</h3>
+      <p>Seus dados sincronizados em tempo real, acesso de qualquer lugar, backup automático e segurança de nível empresarial</p>
+    </div>
+  </div>
+</section>
 
-<!-- PÁGINA 4: OFERTA -->
-<div class="page page-4">
-    <div class="header">
-        <h2>Invista na organização da sua clínica</h2>
-        <div class="line"></div>
+<!-- PRODUCT INFO -->
+<section class="product-info">
+  <div class="section-title reveal">
+    <h2>Tudo que está <span>incluso</span></h2>
+    <p>Detalhes completos do seu acesso ao REVARA Pro</p>
+  </div>
+  
+  <div class="info-grid">
+    <div class="info-card reveal">
+      <h3>🔐 Acesso e Segurança</h3>
+      <ul>
+        <li>Código de ativação exclusivo (formato AA######)</li>
+        <li>Login por CPF + código de ativação</li>
+        <li>Primeiro acesso cadastra nome, WhatsApp e email</li>
+        <li>Até 7 usuários (6 terapeutas + 1 secretária)</li>
+        <li>PIN de 4 dígitos para áreas protegidas</li>
+        <li>Dados salvos no Firebase (Google Cloud)</li>
+      </ul>
     </div>
     
-    <div class="offer-box">
-        <div class="price-original">De R$ 497,00</div>
-        <div class="price-promo"><span>R$</span>397<span>,00</span></div>
-        <div class="price-label">🚀 Preço de Lançamento (por tempo limitado)</div>
-        <div class="economy">💰 Você economiza R$ 100,00</div>
+    <div class="info-card reveal">
+      <h3>📅 Gestão de Agenda</h3>
+      <ul>
+        <li>Agenda compartilhada entre todos os usuários</li>
+        <li>Cores por profissional (6 cores diferentes)</li>
+        <li>Filtro de visualização por terapeuta</li>
+        <li>Agendamento recorrente (semanal/quizenal)</li>
+        <li>Cancelamento de recorrência em massa</li>
+        <li>Alerta de conflito de horário por paciente</li>
+        <li>Visualização mensal e semanal</li>
+      </ul>
     </div>
     
-    <div class="cta-section">
-        <a href="https://wa.me/5531997867911?text=Olá!%20Vi%20a%20apresentação%20do%20ASM%20Gestão%20Clínica%20e%20quero%20comprar%20por%20R$%20397.%20Pode%20me%20passar%20as%20instruções?" class="cta-button" target="_blank">QUERO PROFISSIONALIZAR MINHA CLÍNICA →</a>
-        <p class="cta-text">🔑 Ativação imediata • Acesso em até 2 minutos após a confirmação</p>
+    <div class="info-card reveal">
+      <h3>💰 Controle Financeiro</h3>
+      <ul>
+        <li>Financeiro individual por profissional</li>
+        <li>Filtro de mês em todas as telas</li>
+        <li>Sessões pagas vs pendentes</li>
+        <li>Fluxo de caixa com entradas e despesas</li>
+        <li>Cobrança via WhatsApp (individual ou em massa)</li>
+        <li>Geração de recibos em PDF</li>
+        <li>Exportação para Excel</li>
+      </ul>
     </div>
     
-    <div class="footer-info">
-        <p class="brand">ASM Gestão Clínica</p>
-        <p>© 2024 Dra. Andresa Augusto - CREFITO 40.9314-F</p>
-        <p>Proibida reprodução sem autorização</p>
+    <div class="info-card reveal">
+      <h3>👤 Gestão de Pacientes</h3>
+      <ul>
+        <li>Cadastro completo com CPF e data de nascimento</li>
+        <li>Histórico de atendimentos por paciente</li>
+        <li>Evolução clínica com 10 campos personalizados</li>
+        <li>Relatório mensal com opção de incluir evolução</li>
+        <li>Lembrete de aniversário na agenda</li>
+        <li>Exportação de relatórios em PDF</li>
+        <li>Exclusão de paciente com todos os dados</li>
+      </ul>
     </div>
-</div>
+  </div>
+</section>
+
+<!-- HOW TO USE -->
+<section class="how-to-use">
+  <div class="section-title reveal">
+    <h2>Como <span>acessar</span></h2>
+    <p>Simples, rápido e sem complicação</p>
+  </div>
+  
+  <div class="steps-grid">
+    <div class="step-card reveal">
+      <div class="step-number">1</div>
+      <h3>Compre pelo WhatsApp</h3>
+      <p>Clique no botão, envie a mensagem e finalize o pagamento. Você recebe seu código de ativação exclusivo imediatamente.</p>
+    </div>
+    
+    <div class="step-card reveal">
+      <div class="step-number">2</div>
+      <h3>Acesse o Link</h3>
+      <p>Entre no sistema usando seu CPF e o código de ativação recebido. Funciona em qualquer dispositivo com internet.</p>
+    </div>
+    
+    <div class="step-card reveal">
+      <div class="step-number">3</div>
+      <h3>Complete seu Cadastro</h3>
+      <p>No primeiro acesso, informe seu nome, WhatsApp e email. Seus dados ficam salvos automaticamente na nuvem.</p>
+    </div>
+    
+    <div class="step-card reveal">
+      <div class="step-number">4</div>
+      <h3>Comece a Usar</h3>
+      <p>Pronto! Cadastre seus pacientes, configure sua agenda e comece a profissionalizar sua clínica imediatamente.</p>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section class="benefits">
+  <div class="section-title reveal">
+    <h2>O que você <span>vai conquistar</span></h2>
+    <p>Benefícios reais para sua clínica crescer</p>
+  </div>
+  
+  <div class="benefits-list">
+    <div class="benefit-item reveal">
+      <div class="benefit-number">1</div>
+      <div class="benefit-content">
+        <h3>Organização Profissional</h3>
+        <p>Deixe de parecer amador. Tenha uma clínica com processos profissionais que transmitem confiança aos pacientes.</p>
+      </div>
+    </div>
+    
+    <div class="benefit-item reveal">
+      <div class="benefit-number">2</div>
+      <div class="benefit-content">
+        <h3>Controle Total do Dinheiro</h3>
+        <p>Saiba exatamente quanto entrou, quanto falta receber e onde está sendo gasto. Nunca mais perca dinheiro por falta de controle.</p>
+      </div>
+    </div>
+    
+    <div class="benefit-item reveal">
+      <div class="benefit-number">3</div>
+      <div class="benefit-content">
+        <h3>Pacientes Mais Satisfeitos</h3>
+        <p>Confirmações automáticas, lembretes de aniversário com mensagem personalizada e atendimento que fideliza.</p>
+      </div>
+    </div>
+    
+    <div class="benefit-item reveal">
+      <div class="benefit-number">4</div>
+      <div class="benefit-content">
+        <h3>Tempo para o que Importa</h3>
+        <p>Pare de perder 2 horas por dia com planilhas. Automatize e use seu tempo para atender mais ou descansar.</p>
+      </div>
+    </div>
+    
+    <div class="benefit-item reveal">
+      <div class="benefit-number">5</div>
+      <div class="benefit-content">
+        <h3>Decisões Baseadas em Dados</h3>
+        <p>Dashboards e relatórios que mostram exatamente o que está funcionando e onde você precisa melhorar.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section class="comparison">
+  <div class="section-title reveal">
+    <h2>Compare e <span>decida</span></h2>
+    <p>Veja o que você leva com o REVARA Pro</p>
+  </div>
+  
+  <div class="comparison-wrapper reveal">
+    <div class="comparison-header">
+      <div>Recurso</div>
+      <div>Sem Sistema</div>
+      <div>REVARA Pro</div>
+    </div>
+    
+    <div class="comparison-row">
+      <div class="feature">📅 Agenda organizada multiusuário</div>
+      <div class="cross">✗</div>
+      <div class="check">✓</div>
+    </div>
+    
+    <div class="comparison-row">
+      <div class="feature">💰 Controle financeiro por profissional</div>
+      <div class="cross">✗</div>
+      <div class="check">✓</div>
+    </div>
+    
+    <div class="comparison-row">
+      <div class="feature">👤 Prontuário digital com evolução</div>
+      <div class="cross">✗</div>
+      <div class="check">✓</div>
+    </div>
+    
+    <div class="comparison-row">
+      <div class="feature">📊 Dashboard com gráficos e filtros</div>
+      <div class="cross">✗</div>
+      <div class="check">✓</div>
+    </div>
+    
+    <div class="comparison-row">
+      <div class="feature">📱 Integração WhatsApp (cobrança em massa)</div>
+      <div class="cross">✗</div>
+      <div class="check">✓</div>
+    </div>
+    
+    <div class="comparison-row">
+      <div class="feature">🔒 Proteção por PIN (dados financeiros)</div>
+      <div class="cross">✗</div>
+      <div class="check">✓</div>
+    </div>
+    
+    <div class="comparison-row">
+      <div class="feature">☁️ Acesso na nuvem 24/7 (Firebase)</div>
+      <div class="cross">✗</div>
+      <div class="check">✓</div>
+    </div>
+    
+    <div class="comparison-row">
+      <div class="feature">📄 PDFs profissionais (recibos/relatórios)</div>
+      <div class="cross">✗</div>
+      <div class="check">✓</div>
+    </div>
+    
+    <div class="comparison-row">
+      <div class="feature">🎂 Lembrete de aniversário automatizado</div>
+      <div class="cross">✗</div>
+      <div class="check">✓</div>
+    </div>
+    
+    <div class="comparison-row">
+      <div class="feature">📈 Exportação Excel e relatório absenteísmo</div>
+      <div class="cross">✗</div>
+      <div class="check">✓</div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+  <div class="section-title reveal">
+    <h2>Dúvidas <span>frequentes</span></h2>
+    <p>Tudo que você precisa saber antes de adquirir</p>
+  </div>
+  
+  <div class="faq-list">
+    <div class="faq-item reveal">
+      <div class="faq-question">Preciso saber programar para usar?</div>
+      <div class="faq-answer">
+        Não! O sistema é 100% online e intuitivo. Se você usa WhatsApp e navega na internet, consegue usar o REVARA Pro. A interface foi desenvolvida para ser simples e direta.
+      </div>
+    </div>
+    
+    <div class="faq-item reveal">
+      <div class="faq-question">Posso usar em mais de um dispositivo?</div>
+      <div class="faq-answer">
+        Sim! Como é na nuvem (Firebase Google), você acessa do celular, tablet, notebook ou computador. Todos os dados sincronizam automaticamente entre os dispositivos em tempo real.
+      </div>
+    </div>
+    
+    <div class="faq-item reveal">
+      <div class="faq-question">Quantos usuários posso cadastrar?</div>
+      <div class="faq-answer">
+        Cada código de ativação permite até 6 terapeutas + 1 secretária (total 7 usuários). Cada terapeuta tem seus dados financeiros individuais protegidos por PIN de 4 dígitos.
+      </div>
+    </div>
+    
+    <div class="faq-item reveal">
+      <div class="faq-question">Meus dados estão seguros?</div>
+      <div class="faq-answer">
+        Absolutamente. Usamos o Firebase (Google) que é um dos servidores mais seguros do mundo. Seus dados são criptografados, armazenados em nuvem com backup automático e protegidos por autenticação.
+      </div>
+    </div>
+    
+    <div class="faq-item reveal">
+      <div class="faq-question">Tem mensalidade ou taxa de adesão?</div>
+      <div class="faq-answer">
+        Não! O valor é único. Você paga uma vez e usa para sempre. Não há mensalidades, taxas ocultas ou custos adicionais.
+      </div>
+    </div>
+    
+    <div class="faq-item reveal">
+      <div class="faq-question">Como recebo o acesso?</div>
+      <div class="faq-answer">
+        Imediatamente após a confirmação do pagamento, você recebe seu código de ativação exclusivo (formato AA######) e o link de acesso. É só entrar, fazer o primeiro acesso com seus dados (nome, CPF, WhatsApp, email) e começar a usar.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA - COM PREÇO E ATUALIZAÇÕES -->
+<section class="final-cta">
+  <h2>Transforme sua clínica <span>hoje</span></h2>
+  <p>Invista na organização profissional e colha os resultados imediatamente. Sua gestão nunca mais será a mesma.</p>
+  
+  <div class="urgency">⚡ Condição especial de lançamento por tempo limitado</div>
+  
+  <div class="updates-box">
+    <strong>🎁 BÔNUS: Atualizações gratuitas por 6 meses</strong>
+    <p>Se houver qualquer atualização do sistema nos próximos 6 meses, você recebe automaticamente no seu link, sem pagar nada a mais.</p>
+  </div>
+  
+  <div class="price-box">
+    <span class="old-price">De R$ 997,00</span>
+    <span class="new-price">R$ 697,00</span>
+    <span class="installment">ou 12x de R$ 64,75 no cartão</span>
+  </div>
+  
+  <a href="https://wa.me/5531997867911?text=Olá! Quero adquirir o ASM Gestão Clínica - REVARA Pro pelo valor de lançamento de R$697" class="cta-whatsapp">
+    📱 COMPRAR PELO WHATSAPP
+  </a>
+  
+  <div class="guarantee">
+    <div class="guarantee-icon">🛡️</div>
+    <div class="guarantee-text">
+      <strong>Garantia de 7 dias</strong>
+      <span>Não gostou? Devolvemos 100% do seu dinheiro. Sem perguntas, sem burocracia.</span>
+    </div>
+  </div>
+  
+  <div class="contact-info">
+    <strong>Dúvidas? Fale comigo:</strong>
+    <p>👩‍⚕️ Dra. Andresa Augusto - CREFITO 40.9314-F</p>
+    <p>📱 WhatsApp: (31) 99786-7911</p>
+    <p>💼 Desenvolvedora do REVARA Pro</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p><strong>ASM Gestão Clínica – REVARA Pro</strong></p>
+  <p>Desenvolvido por Dra. Andresa Augusto - CREFITO 40.9314-F</p>
+  <p>WhatsApp: (31) 99786-7911</p>
+  <div class="copyright">
+    © 2024 ASM Gestão Clínica. Todos os direitos reservados.<br>
+    Proibida reprodução sem autorização.
+  </div>
+</footer>
+
+<script>
+// FAQ Toggle
+document.querySelectorAll('.faq-question').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.parentElement;
+    const isActive = item.classList.contains('active');
+    
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+    
+    if (!isActive) {
+      item.classList.add('active');
+    }
+  });
+});
+
+// Scroll Reveal Animation
+const observerOptions = {
+  threshold: 0.1,
+  rootMargin: '0px 0px -50px 0px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('active');
+    }
+  });
+}, observerOptions);
+
+document.querySelectorAll('.reveal').forEach(el => {
+  observer.observe(el);
+});
+</script>
 
 </body>
 </html>
